@@ -1,0 +1,324 @@
+﻿@model ViewModel<ContactCreateEntryViewModel>
+@{
+    ViewData["Title"] = "New Contact";
+    var errorMessage = ViewData.Model.Data.ErrorMessage;
+}
+
+<div style="display:@(string.IsNullOrWhiteSpace(errorMessage) ? "none" : "block")" class="alert alert-danger hide" role="alert">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <strong>Error!</strong> @Html.Raw(errorMessage).
+</div>
+
+<h1>@ViewData["Title"]</h1>
+<hr/>
+<form action="@UIRoutesHelper.Contact.CreateEntry.GetUrl()" role="form" method="post" asp-antiforgery="true">
+    
+    <div class="form-group row">
+        <label asp-for="Data.Form.FirstName" class="col-sm-2 control-label">First Name:</label>
+        <input asp-for="Data.Form.FirstName" class="col-sm-10 form-control">
+        <span asp-validation-for="Data.Form.FirstName" class="text-danger text-break"></span>
+    </div>
+    <div class="form-group row">
+        <label asp-for="Data.Form.LastName" class="col-sm-2 control-label">Last Name:</label>
+        <input asp-for="Data.Form.LastName" class="col-sm-10 form-control">
+        <span asp-validation-for="Data.Form.LastName" class="text-danger text-break"></span>
+    </div>
+    <div class="form-group row">
+        <label asp-for="Data.Form.Title" class="col-sm-2 control-label">Title:</label>
+        <input asp-for="Data.Form.Title" class="col-sm-10 form-control">
+        <span asp-validation-for="Data.Form.Title" class="text-danger text-break"></span>
+    </div>
+    <div class="form-group row">
+        <label asp-for="Data.Form.Company" class="col-sm-2 control-label">Company:</label>
+        <input asp-for="Data.Form.Company" class="col-sm-10 form-control">
+        <span asp-validation-for="Data.Form.Company" class="text-danger text-break"></span>
+    </div>
+    <div class="form-group row">
+        <label asp-for="Data.Form.Email" class="col-sm-2 control-label">Email:</label>
+        <input asp-for="Data.Form.Email" class="col-sm-10 form-control">
+        <span asp-validation-for="Data.Form.Email" class="text-danger text-break"></span>
+    </div>
+    <div class="form-group row">
+        <label asp-for="Data.Form.CellPhone" class="col-sm-2 control-label">Phone cell:</label>
+        <input asp-for="Data.Form.CellPhone" class="col-sm-10 form-control">
+        <span asp-validation-for="Data.Form.CellPhone" class="text-danger text-break"></span>
+    </div>
+    <div class="form-group row">
+        <label asp-for="Data.Form.BusinessPhone" class="col-sm-2 control-label">Phone business:</label>
+        <input asp-for="Data.Form.BusinessPhone" class="col-sm-10 form-control">
+        <span asp-validation-for="Data.Form.BusinessPhone" class="text-danger text-break"></span>
+    </div>
+    <div class="form-group row">
+        <label asp-for="Data.Form.Fax" class="col-sm-2 control-label">Fax:</label>
+        <input asp-for="Data.Form.Fax" class="col-sm-10 form-control">
+        <span asp-validation-for="Data.Form.Fax" class="text-danger text-break"></span>
+    </div>
+    <div class="form-group row">
+        <label asp-for="Data.Form.AddressLine1" class="col-sm-2 control-label">Address Line 1:</label>
+        <input asp-for="Data.Form.AddressLine1" class="col-sm-10 form-control">
+        <span asp-validation-for="Data.Form.AddressLine1" class="text-danger text-break"></span>
+    </div>
+    <div class="form-group row">
+        <label asp-for="Data.Form.AddressLine2" class="col-sm-2 control-label">Address Line 2:</label>
+        <input asp-for="Data.Form.AddressLine2" class="col-sm-10 form-control">
+        <span asp-validation-for="Data.Form.AddressLine2" class="text-danger text-break"></span>
+    </div>
+    <div class="form-group row">
+        <label asp-for="Data.Form.City" class="col-sm-2 control-label">City:</label>
+        <input asp-for="Data.Form.City" class="col-sm-10 form-control">
+        <span asp-validation-for="Data.Form.City" class="text-danger text-break"></span>
+    </div>
+    <div class="form-group row">
+        <label asp-for="Data.Form.State" class="col-sm-2 control-label">State:</label>
+        <input asp-for="Data.Form.State" class="col-sm-10 form-control">
+        <span asp-validation-for="Data.Form.State" class="text-danger text-break"></span>
+    </div>
+    <div class="form-group row">
+        <label asp-for="Data.Form.Zip" class="col-sm-2 control-label">Zip:</label>
+        <input asp-for="Data.Form.Zip" class="col-sm-10 form-control">
+        <span asp-validation-for="Data.Form.Zip" class="text-danger text-break"></span>
+    </div>
+    <div class="form-check">
+        <input type="checkbox" asp-for="Data.Form.IsActive" class="form-check-input">
+        <label asp-for="Data.Form.IsActive" class="form-check-label">IsActive</label>
+    </div>
+    <input type="hidden" asp-for="Data.Form.Labels">
+    <input type="hidden" asp-for="Data.Form.Musicians">
+    <input type="hidden" asp-for="Data.Form.Platforms">
+    <div class="container">
+        <div id="duplicated-records-warning" class="alert alert-warning hide">
+            <strong>Warning!</strong> You are trying to add element that is already in the list.
+        </div>
+        <h1>Relationships</h1>
+        <hr/>
+        <h3>Add a Music label, Musician or Platform</h3>
+        <div class="form-group row">
+            <select id="relationshipNameSelect" class="col-sm-9 form-control">
+                @{
+                    foreach (var item in Model.Data.Relationships)
+                    {
+                        <option item-type=@item.Type value=@item.Id>
+                            @item.Value
+                        </option>
+                    }
+                }
+            </select>
+            <button type="submit" id="relationshipAddButton" class="col-sm-2 btn btn-primary">Add</button>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            Music Labels
+          </div>
+          <div class="card-body" id="musicLabels"></div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            Musicians
+          </div>
+          <div class="card-body" id="musicians">
+            
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            Platforms
+          </div>
+          <div class="card-body" id="platforms">
+            
+          </div>
+        </div>
+
+    </div>
+    <div class="text-center">
+        <a href="@UIRoutesHelper.Contact.GetEntries.GetUrl()" class="btn btn-light btn-md">Close</a>
+        <button type="submit" class="btn btn-primary btn-md">Save</button>
+    </div>
+</form>
+
+<script type="text/javascript">
+    const LABEL = 'label';
+    const PLATFORM = 'platform';
+    const MUSICIAN = 'musician';
+    
+    const musicLabelsValue = document.getElementById('Data_Form_Labels');
+    const musiciansValue = document.getElementById('Data_Form_Musicians');
+    const platformsValue = document.getElementById('Data_Form_Platforms');
+
+    const musicLabels = document.getElementById('musicLabels');
+    const musicians = document.getElementById('musicians');
+    const platforms = document.getElementById('platforms');
+
+    function appendBlock(parentElement, text, type, relatedEntityId) {
+        const block = document.createElement('div');
+        const elementId = Date.now();
+        block.innerHTML = `<div class="freetext"><span>${text}</span><span type=${type} entityId=${relatedEntityId} id=${elementId}>&times;</span></div>`;
+
+        parentElement.appendChild(block);
+
+        document.getElementById(elementId).onclick = function($event) {
+            $event.preventDefault();
+
+            const target = $event.target;
+            const type = target.getAttribute('type');
+            const entityId = target.getAttribute('entityId');
+            
+            if (type === LABEL) {
+                const hiddenFieldValue = musicLabelsValue.value;
+                let currentValueArr = JSON.parse(hiddenFieldValue || '[]');
+
+                currentValueArr = currentValueArr.filter(x => x != entityId);
+                musicLabelsValue.value = JSON.stringify(currentValueArr);
+            }
+
+            if (type === PLATFORM) {
+                const hiddenFieldValue = platformsValue.value;
+                let currentValueArr = JSON.parse(hiddenFieldValue || '[]');
+
+                currentValueArr = currentValueArr.filter(x => x != entityId);
+                platformsValue.value = JSON.stringify(currentValueArr);
+            }
+
+            if (type === MUSICIAN) {
+                const hiddenFieldValue = musiciansValue.value;
+                let currentValueArr = JSON.parse(hiddenFieldValue || '[]');
+
+                currentValueArr = currentValueArr.filter(x => x != entityId);
+                musiciansValue.value = JSON.stringify(currentValueArr);
+            }
+
+            block.removeAttribute("onclick");
+            block.parentNode.removeChild(block);
+        };
+    }
+
+    $(document).ready(function() {
+       const existingPlatforms = @Json.Serialize(Model.Data.Form == null ? new List<Relationship>() : Model.Data.Form.ExistingPlatforms);       
+       for (let i = 0; i < existingPlatforms.length; i ++) {
+           const elelemt = existingPlatforms[i].value;
+           const value = elelemt.substring(0, elelemt.length - ` (${PLATFORM})`.length);
+           appendBlock(platforms, value, PLATFORM, existingPlatforms[i].id);
+       }
+       
+       const existingMusicians = @Json.Serialize(Model.Data.Form == null ? new List<Relationship>() : Model.Data.Form.ExistingMusicians);
+       for (let i = 0; i < existingMusicians.length; i ++) {
+           const elelemt = existingMusicians[i].value;
+           const value = elelemt.substring(0, elelemt.length - ` (${MUSICIAN})`.length);
+           appendBlock(musicians, value, MUSICIAN, existingMusicians[i].id);
+       }
+
+       const existingLabels = @Json.Serialize(Model.Data.Form == null ? new List<Relationship>() : Model.Data.Form.ExistingLabels);
+       for (let i = 0; i < existingLabels.length; i ++) {
+           const elelemt = existingLabels[i].value;
+           const value = elelemt.substring(0, elelemt.length - ` (${LABEL})`.length);
+           appendBlock(musicLabels, value, LABEL, existingLabels[i].id);
+       }
+    });
+
+    const relationshipName = document.getElementById('relationshipNameSelect');
+
+    
+
+    $('#relationshipAddButton').click(function(event) {
+        event.preventDefault();
+
+        const selectedRelationShip = $('#relationshipNameSelect option:selected');
+        
+        const selectedElement = selectedRelationShip.text().trim();
+        const selectedElementId = selectedRelationShip.val();
+        const type = selectedRelationShip.attr('item-type');
+
+        if (type === LABEL) {
+            const hiddenFieldValue = musicLabelsValue.value;
+            const currentValueArr = JSON.parse(hiddenFieldValue || '[]');
+            
+            if (currentValueArr.includes(selectedElementId)) {
+                
+                $('#duplicated-records-warning').show();
+
+                setTimeout(() => {
+                    $('#duplicated-records-warning').hide();
+                }, 1500);
+
+                return;
+            }
+            const value = selectedElement.substring(0, selectedElement.length - ` (${LABEL})`.length);
+            appendBlock(musicLabels, value, LABEL, selectedElementId);
+            currentValueArr.push(selectedElementId);
+            musicLabelsValue.value = JSON.stringify(currentValueArr);
+        }
+        
+        if (type === MUSICIAN) {
+            const hiddenFieldValue = musiciansValue.value;
+            const currentValueArr = JSON.parse(hiddenFieldValue || '[]');
+
+            if (musiciansValue.value.includes(selectedElementId)) {
+                $('#duplicated-records-warning').show();
+
+                setTimeout(() => {
+                    $('#duplicated-records-warning').hide();
+                }, 1500);
+                return;
+            }
+            const value = selectedElement.substring(0, selectedElement.length - ` (${MUSICIAN})`.length);
+            appendBlock(musicians, value, MUSICIAN, selectedElementId);
+            currentValueArr.push(selectedElementId);
+            musiciansValue.value = JSON.stringify(currentValueArr);
+        }
+        
+        if (type === PLATFORM) {
+            const hiddenFieldValue = platformsValue.value;
+            const currentValueArr = JSON.parse(hiddenFieldValue || '[]');
+
+            if (platformsValue.value.includes(selectedElementId)) {                
+                $('#duplicated-records-warning').show();
+
+                setTimeout(() => {
+                    $('#duplicated-records-warning').hide();
+                }, 1500);
+                return;
+            }
+
+            const value = selectedElement.substring(0, selectedElement.length - ` (${PLATFORM})`.length);
+            
+            appendBlock(platforms, value, PLATFORM, selectedElementId);
+            currentValueArr.push(selectedElementId);
+            platformsValue.value = JSON.stringify(currentValueArr);
+        }
+
+    });
+   
+</script>
+
+<style>
+    .freetext
+    {
+        margin: 10px;
+    }
+    .freetext span:first-child {
+        border: 1px solid black;
+        padding: 8px;
+    }
+    .freetext span:last-child {
+        cursor: pointer;
+        width: 32px;
+        height: 32px;
+        opacity: 0.3;
+        font-size: 35px;
+        padding-left: 4px;
+    }
+
+    .freetext span:last-child:hover {
+        opacity: 1;
+    }
+
+    #duplicated-records-warning.hide {
+        display: none;
+    }
+    
+    #duplicated-records-warning.show {
+        display: block;
+    }
+</style>

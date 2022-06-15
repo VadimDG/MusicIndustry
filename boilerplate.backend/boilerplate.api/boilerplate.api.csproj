@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <PackageId>MucicLibrarySharpDev</PackageId>
+    <Authors>SharpDev</Authors>
+    <Company>SharpDev</Company>
+    <Product>MucicLibrary</Product>
+    <IsPackable>true</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\boilerplate.api.common\boilerplate.api.common.csproj" />
+    <ProjectReference Include="..\boilerplate.api.core\boilerplate.api.core.csproj" />
+    <ProjectReference Include="..\boilerplate.api.domain\boilerplate.api.domain.csproj" />
+  </ItemGroup>
+
+</Project>
